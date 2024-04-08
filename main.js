@@ -14,9 +14,7 @@ function searchPokemon() {
             return;
         }
             searchPokedex(response.toLowerCase());
-        searchPokemon();
     });
-
 }
 
 
@@ -28,6 +26,9 @@ function searchPokedex(pokemon) {
             }
             return response.json();
         })
-        .then(data => console.log(data))
-        .catch(error => console.error(error));
+        .then(data => console.log(data.id))
+        .catch(error => console.error(error))
+        .finally(() => {
+            searchPokemon();
+        });
 }

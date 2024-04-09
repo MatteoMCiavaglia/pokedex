@@ -3,34 +3,43 @@ const readline = require("readline");
 // Setup readline to listen on the stdin stream
 const rl = readline.createInterface(process.stdin, process.stdout);
 
-showMenu();     //program start
+run();
+
+
+function run(){
+    showMenu();
+}
 
 function showMenu() {
     rl.question("Enter Pokemon or Berries to search for or STOP:\n", (response) => {    //ask user what to lookup and if they want to exit
-        if(response.toLowerCase() === "pokemon"){       //if user typed pokemon prompt user for specific pokemon and return data
-            rl.question("Enter Name or ID of Pokemon:\n", (response2) => {
-                console.log("Searching Stats for: " + response2 + "!");
-                searchPoke("pokemon/" + response2.toLowerCase(), (data) => {
-                    console.log(data); //handle response from searchPokedex
-                });
-            });
-        }else if(response.toLowerCase() === "berries"){     //if user typed berries then prompt user for specifc berry and return data
-            rl.question("Enter Name or ID of Berry:\n", (response3) => {
-               console.log("Searching for " + response3 + " Berry!");
-               searchPoke("berry/" + response3.toLowerCase(), (data) => {
-                  console.log(data); //handle response from searchPokedex
-               });
-            });
-        }else if(response.toLowerCase() === "stop"){        //close readline and program
-            rl.close();
-            return(0);
-        }else{      //catch typo re-prompt user
-            console.log("TYPO, please re-enter your response!");
-            showMenu();
-        }
+        prompt(response);
     });
 }
 
+function prompt(response) {
+    if (response.toLowerCase() === "pokemon") {       //if user typed pokemon prompt user for specific pokemon and return data
+        rl.question("Enter Name or ID of Pokemon:\n", (response2) => {
+            console.log("Searching Stats for: " + response2 + "!");
+            searchPoke("pokemon/" + response2.toLowerCase(), (data) => {
+                console.log(data); //handle response from searchPokedex
+            });
+        });
+    } else if (response.toLowerCase() === "berries") {     //if user typed berries then prompt user for specifc berry and return data
+        rl.question("Enter Name or ID of Berry:\n", (response3) => {
+            console.log("Searching for " + response3 + " Berry!");
+            searchPoke("berry/" + response3.toLowerCase(), (data) => {
+                console.log(data); //handle response from searchPokedex
+            });
+        });
+    }else if(response.toLowerCase() === "stop"){        //close readline and program
+        rl.close();
+        return(0);
+
+}else{      //catch typo re-prompt user
+        console.log("TYPO, please re-enter your response!");
+        showMenu();
+    }
+}
 
 function searchPoke(term) {
     fetch("https://pokeapi.co/api/v2/" + term)

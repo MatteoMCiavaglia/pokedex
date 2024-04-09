@@ -21,14 +21,14 @@ function prompt(response) {
         rl.question("Enter Name or ID of Pokemon:\n", (response2) => {
             console.log("Searching Stats for: " + response2 + "!");
             searchPoke("pokemon/" + response2.toLowerCase(), (data) => {
-                console.log(data); //handle response from searchPokedex
+                console.log(data); //handle response from searchPoke
             });
         });
-    } else if (response.toLowerCase() === "berries") {     //if user typed berries then prompt user for specifc berry and return data
+    } else if (response.toLowerCase() === "berries") {     //if user typed berries then prompt user for specific berry and return data
         rl.question("Enter Name or ID of Berry:\n", (response3) => {
             console.log("Searching for " + response3 + " Berry!");
             searchPoke("berry/" + response3.toLowerCase(), (data) => {
-                console.log(data); //handle response from searchPokedex
+                console.log(data); //handle response from searchPoke
             });
         });
     }else if(response.toLowerCase() === "stop"){        //close readline and program
@@ -45,7 +45,7 @@ function searchPoke(term) {
     fetch("https://pokeapi.co/api/v2/" + term)
         .then(response => {
             if (!response.ok) {     //if response doesn't = ok then throw an error
-                throw new Error("Could not fetch pokemon.");
+                throw new Error("Could not fetch pokemon or berry.");
             }
             return response.json();
         })

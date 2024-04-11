@@ -11,7 +11,7 @@ function run(){
 }
 
 function showMenu() {
-    rl.question("Enter Pokemon or Berries to search for or STOP:\n", (response) => {    //ask user what to lookup and if they want to exit
+    rl.question("Enter Pokemon, Moves, or Items to search for or STOP:\n", (response) => {    //ask user what to lookup and if they want to exit
         prompt(response);
     });
 }
@@ -24,13 +24,20 @@ function prompt(response) {
                 console.log(data); //handle response from searchPoke
             });
         });
-    } else if (response.toLowerCase() === "berries") {     //if user typed berries then prompt user for specific berry and return data
-        rl.question("Enter Name or ID of Berry:\n", (response3) => {
-            console.log("Searching for " + response3 + " Berry!");
-            searchPoke("berry/" + response3.toLowerCase(), (data) => {
-                console.log(data); //handle response from searchPoke
+    } else if (response.toLowerCase() === "moves") {     //if user typed berries then prompt user for specific berry and return data
+        rl.question("Enter Name or ID of Move:\n", (response3) => {
+            console.log("Searching for " + response3 + " Move!");
+            searchPoke("move/" + response3.toLowerCase(), (data) => {
+                console.log(data); //handle response from search
             });
         });
+    }else if (response.toLowerCase() === "items") {     //if user typed berries then prompt user for specific berry and return data
+            rl.question("Enter Name or ID of Item:\n", (response4) => {
+                console.log("Searching for " + response4 + " Item!");
+                searchPoke("item/" + response4.toLowerCase(), (data) => {
+                    console.log(data); //handle response from searchPoke
+                });
+            });
     }else if(response.toLowerCase() === "stop"){        //close readline and program
         rl.close();
         return(0);
@@ -55,7 +62,9 @@ function searchPoke(term) {
         .then(data => {
             if(term.startsWith("pokemon")) {     //print out pokemon data neatly
                 printPoke(data);
-            }else if(term.startsWith("berry")){
+            }else if(term.startsWith("move")){
+                printMove(data);
+            }else if(term.startsWith("item")){
                 printItem(data);
             }else{
                     console.log("Invalid search term.");
@@ -99,16 +108,20 @@ function printPoke(json){
 
 
 function printItem(json){
-        console.log("Name:", json.name);
-        console.log("ID:", json.id);
-        console.log("Growth Time:", json.growth_time);
-        console.log("Max Harvest:", json.max_harvest);
-        console.log("Natural Gift Power:", json.natural_gift_power);
-        console.log("Size:", json.size);
-        console.log("Smoothness:", json.smoothness);
-        console.log("Soil Dryness:", json.soil_dryness);
+    console.log("Name:", json.name);
+    console.log("ID:", json.id);
+    console.log("Category:", json.category)
+    console.log("Cost:", json.cost);
+    console.log("Fling Power:", json.fling_power);
 }
 
 function printMove(json){
-
+    console.log("Name:", json.name);
+    console.log("ID:", json.id);
+    console.log("Type:", json.type);
+    console.log("Accuracy:", json.accuracy);
+    console.log("Power:", json.power);
+    console.log("PP:", json.pp);
+    console.log("Target:", json.target);
+    console.log("Effect Chance:", json.effect_chance);
 }

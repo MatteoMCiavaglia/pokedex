@@ -3,40 +3,36 @@ const readline = require("readline");
 // Setup readline to listen on the stdin stream
 const rl = readline.createInterface(process.stdin, process.stdout);
 
-run();
+run(); //run the program
 
 
 function run(){
-    showMenu();
+    showMenu(); //calls showMenu function
 }
 
 function showMenu() {
-    rl.question("Enter Pokemon, Moves, or Items to search for or STOP:\n", (response) => {    //ask user what to lookup and if they want to exit
-        prompt(response);
+    //ask user what to lookup and if they want to exit
+    rl.question("Enter Pokemon, Moves, or Items to search for or STOP:\n", (response) => {
+        prompt(response); //send response as parameter to prompt function
     });
 }
 
 function prompt(response) {
-    if (response.toLowerCase() === "pokemon") {       //if user typed pokemon prompt user for specific pokemon and return data
+    //if-else statements to figure out what the user wants to look up
+    if (response.toLowerCase() === "pokemon") {       //if user typed pokemon prompt user for specific pokemon
         rl.question("Enter Name or ID of Pokemon:\n", (response2) => {
             console.log("Searching Stats for: " + response2 + "!");
-            searchPoke("pokemon/" + response2.toLowerCase(), (data) => {
-                console.log(data); //handle response from searchPoke
-            });
+            searchPoke(response2.toLowerCase()); //searchPoke function call
         });
-    } else if (response.toLowerCase() === "moves") {     //if user typed berries then prompt user for specific berry and return data
+    } else if (response.toLowerCase() === "moves") {     //if user typed moves then prompt user for specific move
         rl.question("Enter Name or ID of Move:\n", (response3) => {
             console.log("Searching for " + response3 + " Move!");
-            searchPoke("move/" + response3.toLowerCase(), (data) => {
-                console.log(data); //handle response from search
-            });
+            searchMove(response3.toLowerCase());  //searchMove function call
         });
-    }else if (response.toLowerCase() === "items") {     //if user typed berries then prompt user for specific berry and return data
+    }else if (response.toLowerCase() === "items") {     //if user typed items then prompt user for specific item
             rl.question("Enter Name or ID of Item:\n", (response4) => {
                 console.log("Searching for " + response4 + " Item!");
-                searchPoke("item/" + response4.toLowerCase(), (data) => {
-                    console.log(data); //handle response from searchPoke
-                });
+                searchItem(response4.toLowerCase());  //searchItem function call
             });
     }else if(response.toLowerCase() === "stop"){        //close readline and program
         rl.close();
@@ -52,40 +48,55 @@ function prompt(response) {
 //Search functions
 
 function searchPoke(term) {
-    fetch("https://pokeapi.co/api/v2/" + term)
+    fetch("https://pokeapi.co/api/v2/pokemon/" + term)
         .then(response => {
             if (!response.ok) {     //if response doesn't = ok then throw an error
-                throw new Error("Could not fetch pokemon or berry.");
+                throw new Error("Could not fetch pokemon!");
             }
-            return response.json();
+            return response.json(); //return and convert as json format
         })
         .then(data => {
-            if(term.startsWith("pokemon")) {     //print out pokemon data neatly
-                printPoke(data);
-            }else if(term.startsWith("move")){
-                printMove(data);
-            }else if(term.startsWith("item")){
-                printItem(data);
-            }else{
-                    console.log("Invalid search term.");
-                    showMenu();
-            }
+                printPoke(data); //passes json data to printPoke function
         })
         .catch(error => console.error(error))
         .finally(() => {
-            showMenu();
+            showMenu(); //after it calls printPoke and prints data it will then prompt the user again for a new lookup
         });
 }
 
-
-function ssearchItem(term){
-
-}
-
 function searchMove(term){
-
+    fetch("https://pokeapi.co/api/v2/move/" + term)
+        .then(response => {
+            if (!response.ok) {     //if response doesn't = ok then throw an error
+                throw new Error("Could not fetch move!");
+            }
+            return response.json(); //return and convert as json format
+        })
+        .then(data => {
+            printMove(data);
+        })
+        .catch(error => console.error(error))
+        .finally(() => {
+            showMenu(); //after it calls printMove and prints data it will then prompt the user again for a new lookup
+        });
 }
 
+function searchItem(term){
+    fetch("https://pokeapi.co/api/v2/item/" + term)
+        .then(response => {
+            if (!response.ok) {     //if response doesn't = ok then throw an error
+                throw new Error("Could not fetch item!");
+            }
+            return response.json(); //return and convert as json format
+        })
+        .then(data => {
+            printItem(data);
+        })
+        .catch(error => console.error(error))
+        .finally(() => {
+            showMenu(); //after it calls printItem and prints data it will then prompt the user again for a new lookup
+        });
+}
 
 
 //Print data functions
@@ -106,22 +117,20 @@ function printPoke(json){
         });
     }
 
+function printMove(json){
+    console.log("Name:", json.name);
+    console.log("ID:", json.id);
+    console.log("Type:", json.type.name);
+    console.log("Accuracy:", json.accuracy);
+    console.log("Power:", json.power);
+    console.log("PP:", json.pp);
+    console.log("Target:", json.target.name);
+}
 
 function printItem(json){
     console.log("Name:", json.name);
     console.log("ID:", json.id);
-    console.log("Category:", json.category)
+    console.log("Category:", json.category.name)
     console.log("Cost:", json.cost);
     console.log("Fling Power:", json.fling_power);
-}
-
-function printMove(json){
-    console.log("Name:", json.name);
-    console.log("ID:", json.id);
-    console.log("Type:", json.type);
-    console.log("Accuracy:", json.accuracy);
-    console.log("Power:", json.power);
-    console.log("PP:", json.pp);
-    console.log("Target:", json.target);
-    console.log("Effect Chance:", json.effect_chance);
 }

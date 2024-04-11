@@ -41,6 +41,9 @@ function prompt(response) {
     }
 }
 
+
+//Search functions
+
 function searchPoke(term) {
     fetch("https://pokeapi.co/api/v2/" + term)
         .then(response => {
@@ -50,36 +53,62 @@ function searchPoke(term) {
             return response.json();
         })
         .then(data => {
-            if(term.startsWith("pokemon")){     //print out pokemon data neatly
-            console.log("Name:", data.name);
-            console.log("ID:", data.id);
-            console.log("Base Experience:", data.base_experience);
-            console.log("Height:", data.height);
-            console.log("Weight:", data.weight);
-            console.log("Types:");
-            data.types.forEach(type => {
-                console.log("- ", type.type.name);
-            });
-            console.log("Abilities:");
-            data.abilities.forEach(ability => {
-                console.log("- ", ability.ability.name, "(Hidden:", ability.is_hidden, ")");
-            });
-        }else if (term.startsWith("berry")) {       //print out berries data neatly
-        console.log("Name:", data.name);
-        console.log("ID:", data.id);
-        console.log("Growth Time:", data.growth_time);
-        console.log("Max Harvest:", data.max_harvest);
-        console.log("Natural Gift Power:", data.natural_gift_power);
-        console.log("Size:", data.size);
-        console.log("Smoothness:", data.smoothness);
-        console.log("Soil Dryness:", data.soil_dryness);
-    } else {
-        console.log("Invalid search term.");
-        showMenu();
-    }
+            if(term.startsWith("pokemon")) {     //print out pokemon data neatly
+                printPoke(data);
+            }else if(term.startsWith("berry")){
+                printItem(data);
+            }else{
+                    console.log("Invalid search term.");
+                    showMenu();
+            }
         })
         .catch(error => console.error(error))
         .finally(() => {
             showMenu();
         });
+}
+
+
+function ssearchItem(term){
+
+}
+
+function searchMove(term){
+
+}
+
+
+
+//Print data functions
+
+function printPoke(json){
+        console.log("Name:", json.name);
+        console.log("ID:", json.id);
+        console.log("Base Experience:", json.base_experience);
+        console.log("Height:", json.height);
+        console.log("Weight:", json.weight);
+        console.log("Types:");
+    json.types.forEach(type => {
+            console.log("- ", type.type.name);
+        });
+        console.log("Abilities:");
+    json.abilities.forEach(ability => {
+            console.log("- ", ability.ability.name, "(Hidden:", ability.is_hidden, ")");
+        });
+    }
+
+
+function printItem(json){
+        console.log("Name:", json.name);
+        console.log("ID:", json.id);
+        console.log("Growth Time:", json.growth_time);
+        console.log("Max Harvest:", json.max_harvest);
+        console.log("Natural Gift Power:", json.natural_gift_power);
+        console.log("Size:", json.size);
+        console.log("Smoothness:", json.smoothness);
+        console.log("Soil Dryness:", json.soil_dryness);
+}
+
+function printMove(json){
+
 }

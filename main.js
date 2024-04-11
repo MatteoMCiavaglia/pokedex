@@ -6,7 +6,7 @@ const rl = readline.createInterface(process.stdin, process.stdout);
 run(); //run the program
 
 
-function run(){
+function run() {
     showMenu(); //calls showMenu function
 }
 
@@ -29,16 +29,16 @@ function prompt(response) {
             console.log("Searching for " + response3 + " Move!");
             searchMove(response3.toLowerCase());  //searchMove function call
         });
-    }else if (response.toLowerCase() === "items") {     //if user typed items then prompt user for specific item
-            rl.question("Enter Name or ID of Item:\n", (response4) => {
-                console.log("Searching for " + response4 + " Item!");
-                searchItem(response4.toLowerCase());  //searchItem function call
-            });
-    }else if(response.toLowerCase() === "stop"){        //close readline and program
+    } else if (response.toLowerCase() === "items") {     //if user typed items then prompt user for specific item
+        rl.question("Enter Name or ID of Item:\n", (response4) => {
+            console.log("Searching for " + response4 + " Item!");
+            searchItem(response4.toLowerCase());  //searchItem function call
+        });
+    } else if (response.toLowerCase() === "stop") {        //close readline and program
         rl.close();
-        return(0);
+        return (0);
 
-}else{      //catch typo re-prompt user
+    } else {      //catch typo re-prompt user
         console.log("TYPO, please re-enter your response!");
         showMenu();
     }
@@ -56,7 +56,7 @@ function searchPoke(term) {
             return response.json(); //return and convert as json format
         })
         .then(data => {
-                printPoke(data); //passes json data to printPoke function
+            printPoke(data); //passes json data to printPoke function
         })
         .catch(error => console.error(error))
         .finally(() => {
@@ -64,7 +64,7 @@ function searchPoke(term) {
         });
 }
 
-function searchMove(term){
+function searchMove(term) {
     fetch("https://pokeapi.co/api/v2/move/" + term)
         .then(response => {
             if (!response.ok) {     //if response doesn't = ok then throw an error
@@ -81,7 +81,7 @@ function searchMove(term){
         });
 }
 
-function searchItem(term){
+function searchItem(term) {
     fetch("https://pokeapi.co/api/v2/item/" + term)
         .then(response => {
             if (!response.ok) {     //if response doesn't = ok then throw an error
@@ -101,23 +101,23 @@ function searchItem(term){
 
 //Print data functions
 
-function printPoke(json){
-        console.log("Name:", json.name);
-        console.log("ID:", json.id);
-        console.log("Base Experience:", json.base_experience);
-        console.log("Height:", json.height);
-        console.log("Weight:", json.weight);
-        console.log("Types:");
+function printPoke(json) {
+    console.log("Name:", json.name);
+    console.log("ID:", json.id);
+    console.log("Base Experience:", json.base_experience);
+    console.log("Height:", json.height);
+    console.log("Weight:", json.weight);
+    console.log("Types:");
     json.types.forEach(type => {
-            console.log("- ", type.type.name);
-        });
-        console.log("Abilities:");
+        console.log("- ", type.type.name);
+    });
+    console.log("Abilities:");
     json.abilities.forEach(ability => {
-            console.log("- ", ability.ability.name, "(Hidden:", ability.is_hidden, ")");
-        });
-    }
+        console.log("- ", ability.ability.name, "(Hidden:", ability.is_hidden, ")");
+    });
+}
 
-function printMove(json){
+function printMove(json) {
     console.log("Name:", json.name);
     console.log("ID:", json.id);
     console.log("Type:", json.type.name);
@@ -127,7 +127,7 @@ function printMove(json){
     console.log("Target:", json.target.name);
 }
 
-function printItem(json){
+function printItem(json) {
     console.log("Name:", json.name);
     console.log("ID:", json.id);
     console.log("Category:", json.category.name)
